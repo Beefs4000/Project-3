@@ -1,12 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+// buildSchema will take a string and converts it to the required java script
+const { buildSchema } = require('graphql');
 
 // graphqlHttp exports a valid middleware function, taking incomming requests, funnels them through graphql 
 // query parser and auto-forwards to the correct resolvers
 const graphqlHttp = require('express-graphql');
 
-// buildSchema will take a string and converts it to the required java script
-const { buildSchema } = require('graphql');
+
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -15,7 +16,9 @@ const app = express();
 app.use(bodyParser.json());
 
 // 
-app.use('/graphql', graphqlHttp({
+app.use(
+    '/graphql', 
+    graphqlHttp({
     schema: buildSchema(`
         type RootQuery {
                 events: [String!]!
@@ -30,7 +33,16 @@ app.use('/graphql', graphqlHttp({
             mutation: RootMutation
         }
     `),
-    rootvalue: {}
+    rootvalue: {
+        events: () => {
+            return ['Romantic cooking', 'Sailng', 'All-Night Coding'];
+        },
+        createEvent: (args) => {
+            const eventName = args.name;
+            return eventName;
+        }
+    },
+    graphiql: true
 }));
 
 app.listen(PORT, () => {
