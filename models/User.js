@@ -5,11 +5,7 @@ const userSchema = new Schema({
     username: String,
     password: String,
     email: String,
-    CreatedAt: {
-      type: Date,
-      default: Date.now,
-      get: (timestamp) => dateFormat(timestamp),
-    },
+}, { timestamps: true
 });
 
 module.exports = model('User', userSchema);

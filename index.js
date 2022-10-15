@@ -12,7 +12,9 @@ const PORT = process.env.PORT || 3001;
 // Create a new instance of an Apollo server with the GraphQL schema
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    // This will allow 
+    context: ({ req }) => ({ req })
 });
 
 mongoose.connect(MONGO_DB, { useNewUrlParser: true })

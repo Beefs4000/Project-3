@@ -1,13 +1,63 @@
+const { AuthenticationError } = require('apollo-server');
+
 const Post = require('../../models/Post');
+const checkAuth = require('../../util/check-auth')
 
 module.exports = {
     Query: {
         // async to mitigate query failure
         async getPosts() {
             try {
-                const posts = await Post.find();
+                // Get posts sorted by date entered (latest 1st)
+                const posts = await Post.find().sort({ createdAt: -1});
                 return posts;
             } catch (err) {
+                throw new Error(err);
+            }
+        },
+        // get single post by ID
+        async getPost(_, { postId }){
+            try{
+                const post = await Post.findById(postId);
+                if(post){
+                    return post;
+                } else {
+                    throw new Error('Post not found')
+                }
+            } catch(err){
+                throw new Error(err);
+            }
+        }
+    },
+    Mutation: {
+        async createPost(_, { body }, context){
+            const user = checkAuth(context);
+            // console.log(user);
+
+            const newPost = new Post({
+                body,
+                user: user.id,
+                username: user.username,
+                createdAt: user.createdAt
+            });
+
+            const post = await newPost.save();
+
+            return post;
+        },
+        async deletePost(_, { postId }, context){
+            const user = checkAuth(context);
+
+            // Make's sure autherized user can delete post
+            try{
+                const post = await Post.findById(postId);
+                if(user.username === post.username){
+                    await post.delete();
+                    return 'Yak deleted successfully';
+                } else {
+                    throw new AuthenticationError('Yo, not your Yak to Yik!!')
+                }
+            } catch(err) {
                 throw new Error(err);
             }
         }
