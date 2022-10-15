@@ -23,7 +23,7 @@ module.exports = {
             const { errors, valid } = validateLoginInput(username, password);
             // Get user from database, if none exists return error
 
-            if(!valid){
+            if (!valid) {
                 throw new UserInputError('Something went wrong', { errors });
             }
 
@@ -73,7 +73,7 @@ module.exports = {
                 email,
                 username,
                 password,
-                
+
             });
 
             const res = await newUser.save();

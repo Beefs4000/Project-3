@@ -8,7 +8,7 @@ const postSchema = new Schema({
         type: Date,
         default: Date.now,
         get: (timestamp) => dateFormat(timestamp),
-      },
+    },
     comments: [
         {
             body: String,
@@ -17,7 +17,7 @@ const postSchema = new Schema({
                 type: Date,
                 default: Date.now,
                 get: (timestamp) => dateFormat(timestamp),
-              },
+            },
         }
     ],
     likes: [
@@ -27,7 +27,7 @@ const postSchema = new Schema({
                 type: Date,
                 default: Date.now,
                 get: (timestamp) => dateFormat(timestamp),
-              },
+            },
         }
     ],
     // Link to user model to get specific user
