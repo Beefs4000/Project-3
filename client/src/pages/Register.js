@@ -1,23 +1,26 @@
-import React, { useState } from 'react'
-import { Button, Form } from 'semantic-ui-react'
-import { useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import React, { useContext, useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
-import { useForm } from '../util/hooks'
+import { AuthContext } from '../context/auth';
+import { useForm } from '../util/hooks';
 
 function Register(props) {
+    const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
 
     const { onChange, onSubmit, values } = useForm(registerUser, {
         username: '',
         email: '',
         password: '',
-        confirmPassword: '' 
+        confirmPassword: ''
     });
 
     const [addUser, { loading }] = useMutation(REGISTER_USER, {
-        update(_, result) {
-            console.log(result);
+        // destructure and give register the alias of userData
+        update(_, { data: { register: userData } }) {
+            context.login(userData)
             // redirect to home page
             props.history.push('./')
         },
@@ -27,10 +30,10 @@ function Register(props) {
         //     setErrors(err.graphQLErrors[0].extensions.exception.errors);
         // },
         variables: values
-        
+
     });
-        // fuction hoisted to be used in useForm
-    function registerUser(){
+    // fuction hoisted to be used in useForm
+    function registerUser() {
         addUser();
     }
 

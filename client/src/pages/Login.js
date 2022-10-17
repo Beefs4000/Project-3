@@ -1,23 +1,27 @@
-import React, { useState } from 'react'
-import { Button, Form } from 'semantic-ui-react'
-import { useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+import React, { useContext, useState } from 'react';
+import { Button, Form } from 'semantic-ui-react';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
-import { useForm } from '../util/hooks'
+import { AuthContext } from '../context/auth';
+import { useForm } from '../util/hooks';
 
 function Login(props) {
+    const context = useContext(AuthContext)
     const [errors, setErrors] = useState({});
 
     // retrieving from hooks.js
-    const {onChange, onSubmit, values } = useForm(loginUserCallback, {
-      username: '',
-      password: ''
+    const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+        username: '',
+        password: ''
     })
 
     const [loginUser, { loading }] = useMutation(LOGIN_USER, {
-        update(_, result) {
+        // destructure and give login the alias of userData
+        update(_, { data: { login: userData } }) {
+            context.login(userData)
             // redirect to home page
-            props.history.push('./')
+            props.history.push('./');
         },
         // 
         // onError(err) {
@@ -25,10 +29,10 @@ function Login(props) {
         //     setErrors(err.graphQLErrors[0].extensions.exception.errors);
         // },
         variables: values
-        
+
     });
 
-    function loginUserCallback(){
+    function loginUserCallback() {
         loginUser();
     }
 
@@ -46,7 +50,7 @@ function Login(props) {
                     error={errors.username ? true : false}
                     onChange={onChange}
                 />
-                
+
                 <Form.Input
                     label="Password"
                     placeholder="Password.."
@@ -56,7 +60,7 @@ function Login(props) {
                     error={errors.password ? true : false}
                     onChange={onChange}
                 />
-                
+
                 <Button type="submit" primary>
                     Login
                 </Button>
