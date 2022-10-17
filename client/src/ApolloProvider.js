@@ -10,6 +10,7 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:3001'
 });
 
+// takes request and previous context to get data
 const authLink = setContext(() => {
   const token = localStorage.getItem('jwtToken');
   return {
@@ -19,6 +20,7 @@ const authLink = setContext(() => {
   };
 });
 
+// this adds token to request
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
