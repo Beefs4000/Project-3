@@ -35,7 +35,7 @@ module.exports = {
             // console.log(user);
 
             if (body.trim() === '') {
-                throw new Error('Post body must not be empty')
+                throw new Error('Where is your Yak!!!')
             }
 
             const newPost = new Post({
