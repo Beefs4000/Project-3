@@ -1,7 +1,0 @@
-{
-    "env": {
-        "MONGO_USER": "Beefs4000",
-        "MONGO_PASSWORD": "xOZpwSbNQ1TaYxeB",
-        "MONGO_DB": "events-react-dev"
-    }
-}
