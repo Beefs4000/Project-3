@@ -26,3 +26,6 @@ mongoose.connect(MONGO_DB, { useNewUrlParser: true })
         console.log(`API server running on port ${PORT}!`);
         console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
     })
+    .catch(err => {
+        console.log(err)
+    })

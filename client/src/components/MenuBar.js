@@ -17,6 +17,8 @@ function MenuBar() {
 
     // menubar, if user is logged in show user name and logout. Otherwise show Home, Login and register
     const menuBar = user ? (
+
+        
         <Menu pointing secondary size='massive' color='teal'>
 
             <Menu.Item
